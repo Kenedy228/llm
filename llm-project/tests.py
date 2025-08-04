@@ -1,14 +1,21 @@
-from functions.write_file import write_file 
+from functions.run_python_file import run_python_file
 
 
 def main():
-    testcases = [("calculator", "lorem.txt", "wait, this isn't lorem ipsum"),
-                 ("calculator", "pkg/morelorem.txt", "lorem ipsum dolor sit amet"),
-                 ("calculator", "/tmp/temp.txt", "this should not be allowed")]
+    testcases = [
+        ["calculator", "main.py"],
+        ["calculator", "main.py", ["3 + 5"]],
+        ["calculator", "tests.py"],
+        ["calculator", "../main.py"],
+        ["calculator", "nonexistent.py"],
+            ]
 
     for test in testcases:
         print("Result for current file:")
-        print(write_file(test[0], test[1], test[2]))
+        if len(test) == 3:
+            print(run_python_file(test[0], test[1], test[2]))
+        else:
+            print(run_python_file(test[0], test[1]))
 
 
 if __name__ == "__main__":
