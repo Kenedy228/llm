@@ -1,15 +1,14 @@
-from functions.get_file_content import get_file_content 
+from functions.write_file import write_file 
 
 
 def main():
-    testcases = [("calculator", "main.py"),
-                 ("calculator", "pkg/calculator.py"),
-                 ("calculator", "/bin/cat"),
-                 ("calculator", "pkg/does_not_exist.py")]
+    testcases = [("calculator", "lorem.txt", "wait, this isn't lorem ipsum"),
+                 ("calculator", "pkg/morelorem.txt", "lorem ipsum dolor sit amet"),
+                 ("calculator", "/tmp/temp.txt", "this should not be allowed")]
 
     for test in testcases:
         print("Result for current file:")
-        print(get_file_content(test[0], test[1]))
+        print(write_file(test[0], test[1], test[2]))
 
 
 if __name__ == "__main__":
