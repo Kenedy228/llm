@@ -13,23 +13,49 @@ class Calculator:
             "-": 1,
             "*": 2,
             "/": 2,
+            "(": 0,
         }
 
     def evaluate(self, expression):
         if not expression or expression.isspace():
             return None
-        tokens = expression.strip().split()
+        tokens = self.tokenize(expression)
         return self._evaluate_infix(tokens)
+
+    def tokenize(self, expression):
+        tokens = []
+        current_token = ""
+        for char in expression:
+            if char == " ":
+                if current_token:
+                    tokens.append(current_token)
+                    current_token = ""
+            elif char in self.operators or char in ["(", ")"]:
+                if current_token:
+                    tokens.append(current_token)
+                    current_token = ""
+                tokens.append(char)
+            else:
+                current_token += char
+        if current_token:
+            tokens.append(current_token)
+        return tokens
 
     def _evaluate_infix(self, tokens):
         values = []
         operators = []
 
         for token in tokens:
-            if token in self.operators:
+            if token == "(":
+                operators.append(token)
+            elif token == ")":
+                while operators and operators[-1] != "(":
+                    self._apply_operator(operators, values)
+                operators.pop()  # Remove the opening parenthesis
+            elif token in self.operators:
                 while (
                     operators
-                    and operators[-1] in self.operators
+                    and operators[-1] != "("
                     and self.precedence[operators[-1]] >= self.precedence[token]
                 ):
                     self._apply_operator(operators, values)
@@ -41,6 +67,8 @@ class Calculator:
                     raise ValueError(f"invalid token: {token}")
 
         while operators:
+            if operators[-1] == "(":
+                raise ValueError("Unmatched parenthesis")
             self._apply_operator(operators, values)
 
         if len(values) != 1:
@@ -59,3 +87,10 @@ class Calculator:
         b = values.pop()
         a = values.pop()
         values.append(self.operators[operator](a, b))
+
+
+if __name__ == "__main__":
+    calc = Calculator()
+    expression = "3 + (7 * 2)"
+    result = calc.evaluate(expression)
+    print(f"{expression} = {result}")

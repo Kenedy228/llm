@@ -1,8 +1,6 @@
 from google.genai import types
-from functions.schemas import schema_get_files_info
-from functions.schemas import schema_get_file_content
-from functions.schemas import schema_write_file
-from functions.schemas import schema_run_python_file
+from functions.utils import get_function_declarations
+
 
 system_prompt = """
 You are a helpful AI coding agent.
@@ -18,10 +16,5 @@ All paths you provide should be relative to the working directory. You do not ne
 """
 
 available_functions = types.Tool(
-    function_declarations=[
-        schema_write_file,
-        schema_get_file_content,
-        schema_run_python_file,
-        schema_get_files_info,
-    ],
+    function_declarations=get_function_declarations()
 )

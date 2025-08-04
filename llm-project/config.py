@@ -8,3 +8,7 @@ MODEL = "gemini-2.0-flash-001"
 
 #read content func
 MAX_CHARS = 10000
+
+#common
+WORKING_DIR = "./calculator"
+MAX_ITERS = 20
