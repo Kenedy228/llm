@@ -17,11 +17,11 @@ def run_python_file(working_directory, file_path, args=[]):
         run_args.extend(args)
 
         completed_process = subprocess.run(run_args,
-                timeout=30,
-                cwd=abs_working_dir,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True)
+            timeout=30,
+            cwd=abs_working_dir,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True)
 
         result = []
 

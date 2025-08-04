@@ -1,7 +1,6 @@
 import os
+from config import MAX_CHARS
 
-
-MAX_CHARS = 10000
 
 def get_file_content(working_directory, file_path):
     abs_working_dir = os.path.abspath(working_directory)
@@ -17,5 +16,3 @@ def get_file_content(working_directory, file_path):
     if len(contents) == MAX_CHARS:
         contents = f"{contents}[...File \"{target_path}\" truncated at {MAX_CHARS} characters]"
     return contents
-
-    

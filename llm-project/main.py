@@ -1,14 +1,12 @@
-import os
 import sys
-from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+from config import API_KEY, MODEL
+from prompt import available_functions, system_prompt
 
-load_dotenv()
-api_key = os.environ.get("GEMINI_API_KEY")
+api_key = API_KEY
 client = genai.Client(api_key=api_key)
-model = "gemini-2.0-flash-001"
-
+model = MODEL
 
 def handle_user_prompt(args):
     if len(args) == 1:
@@ -37,7 +35,8 @@ def handle_user_prompt(args):
 
 
 def generate_report(response, user_prompt, verbose=False):
-    print(response.text)
+    for f in response.function_calls:
+        print(f"Calling function: {f.name}({f.args})")
     if verbose:
         print(f"User prompt: {user_prompt}")
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
@@ -49,7 +48,7 @@ def main():
     messages = [
         types.Content(role="user", parts=[types.Part(text=user_prompt)])
     ]
-    response = client.models.generate_content(model=model, contents=messages)
+    response = client.models.generate_content(model=model, contents=messages, config=types.GenerateContentConfig(tools=[available_functions], system_instruction=system_prompt))
     generate_report(response, user_prompt, verbose)
 
 
